@@ -11,12 +11,14 @@ class App extends Component {
     this.state = {
       searchResults: [],
       playlistName: 'Enter name of Playlist',
-      playlistTracks: []
+      playlistTracks: [],
+      collaborative: false
     }
     this.addTrack = this.addTrack.bind(this);
     this.removeTrack = this.removeTrack.bind(this);
     this.updatePlaylistName = this.updatePlaylistName.bind(this);
     this.savePlaylist = this.savePlaylist.bind(this);
+    this.toggleCollaborative = this.toggleCollaborative.bind(this);
     this.search = this.search.bind(this);
   }
   addTrack(track) {
@@ -41,12 +43,16 @@ class App extends Component {
     this.state.playlistTracks.forEach(track => {
       trackURIs.push('spotify:track:'+track.id);
     });
-    Spotify.savePlaylist(this.state.playlistName, trackURIs);
+    Spotify.savePlaylist(this.state.playlistName, trackURIs, this.state.collaborative);
     this.setState({
+      searchResults: [],
       playlistName: 'Enter name of Playlist',
       playlistTracks: [],
-      searchResults: []
+      collaborative: false
     });
+  }
+  toggleCollaborative() {
+    this.setState({collaborative: !this.state.collaborative});
   }
   search(term) {
     Spotify.search(term).then(tracks => {
@@ -71,6 +77,8 @@ class App extends Component {
               playlistTracks={this.state.playlistTracks}
               onRemove={this.removeTrack}
               onNameChange={this.updatePlaylistName}
+              collaborative={this.state.collaborative}
+              onCollaborativeToggle={this.toggleCollaborative}
               onSave={this.savePlaylist} />
           </div>
         </div>

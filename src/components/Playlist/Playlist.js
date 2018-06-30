@@ -6,9 +6,13 @@ class Playlist extends Component {
   constructor(props) {
     super(props);
     this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleCollaborativeToggle = this.handleCollaborativeToggle.bind(this);
   }
   handleNameChange(e) {
     this.props.onNameChange(e.target.value);
+  }
+  handleCollaborativeToggle(){
+    this.props.onCollaborativeToggle();
   }
   render() {
     return (
@@ -16,6 +20,10 @@ class Playlist extends Component {
         <input
           value={this.props.playlistName}
           onChange={this.handleNameChange} />
+        <input
+          type="checkbox"
+          checked={this.props.collaborative}
+          onChange={this.handleCollaborativeToggle} /> Collaborative
         <TrackList
           tracks={this.props.playlistTracks}
           onRemove={this.props.onRemove}

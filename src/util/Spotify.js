@@ -19,7 +19,7 @@ const Spotify = {
       window.history.pushState('Access Token', null, '/');
       return userAccessToken;
     } else {
-      window.location = `https://accounts.spotify.com/authorize?client_id=${clientID}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectURI}`;
+      window.location = `https://accounts.spotify.com/authorize?client_id=${clientID}&response_type=token&scope=playlist-modify-private&redirect_uri=${redirectURI}`;
     }
   },
   search(term) {
@@ -49,7 +49,7 @@ const Spotify = {
       }
     });
   },
-  savePlaylist(playlistName, trackURIs) {
+  savePlaylist(playlistName, trackURIs, collaborative) {
     if (playlistName && trackURIs) {
       userAccessToken = this.getAccessToken();
       const headers = {
@@ -58,7 +58,11 @@ const Spotify = {
       const createPlaylistHeaders = {
         headers: headers,
         method: 'POST',
-        body: JSON.stringify({name: playlistName})
+        body: JSON.stringify({
+          name: playlistName,
+          public: !collaborative,
+          collaborative: collaborative
+        })
       };
       const addTracksHeaders = {
         headers: headers,
